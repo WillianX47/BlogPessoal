@@ -9,24 +9,28 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import com.sun.istack.NotNull;
-import javax.validation.constraints.Size;
+
+/** 
+ * Classe espelho tabela Postagem no db_blogpessoal
+ * @author Will
+ *
+ */
 
 @Entity
 @Table(name = "postagem")
 public class Postagem {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
 	
-	@NotNull
-	@Size(min = 5, max = 100)
-	private String titulo;
+	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) long id;
 	
-	@NotNull
-	@Size(min = 5, max = 500)
-	private String texto;
+	private @NotNull @NotBlank @Size(min = 5, max = 100) String titulo;
+	
+	
+	
+	private @NotNull @NotBlank @Size(min = 5, max = 500) String texto;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date date = new java.sql.Date(System.currentTimeMillis());
