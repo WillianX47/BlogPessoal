@@ -62,8 +62,8 @@ public class PostagemController {
 	 * @return
 	 */
 	@GetMapping("/texto/{texto}")
-	public ResponseEntity<List<Postagem>> findAllByTexto(@PathVariable String texto){
-		return ResponseEntity.ok(postagemRepositorio.findAllByTextoContainingIgnoreCase(texto));
+	public ResponseEntity <List<Postagem>> findAllByTexto(@PathVariable String texto){
+		return ResponseEntity.ok(postagemRepositorio.findAllByTextoPostagemContainingIgnoreCase(texto));
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class PostagemController {
 	 */
 	@GetMapping("/titulo/{titulo}")
 	public ResponseEntity<List<Postagem>> findByTitulo(@PathVariable String titulo) {
-		return ResponseEntity.ok(postagemRepositorio.findAllByTituloContainingIgnoreCase(titulo));
+		return ResponseEntity.ok(postagemRepositorio.findAllByTituloPostagemContainingIgnoreCase(titulo));
 	}
 	
 	/**

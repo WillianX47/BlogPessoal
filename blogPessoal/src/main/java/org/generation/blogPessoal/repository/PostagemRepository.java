@@ -13,7 +13,7 @@ public interface PostagemRepository extends JpaRepository<Postagem, Long> {
 	 * @param titulo
 	 * @return
 	 */
-	public List<Postagem> findAllByTituloContainingIgnoreCase(String titulo);
+	public List<Postagem> findAllByTituloPostagemContainingIgnoreCase(String tituloPostagem);
 
 	/**
 	 * Procura todos os id
@@ -22,6 +22,6 @@ public interface PostagemRepository extends JpaRepository<Postagem, Long> {
 	 */
 	public Optional<Postagem> findAllById(Long id);
 	
-	public List<Postagem> findAllByTextoContainingIgnoreCase(String texto);
+	public List<Postagem> findAllByTextoPostagemContainingIgnoreCase(String textoPostagem);
 	
 }
