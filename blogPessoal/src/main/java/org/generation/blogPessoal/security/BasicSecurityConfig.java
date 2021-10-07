@@ -14,19 +14,32 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class BasicSecurityConfig extends WebSecurityConfigurerAdapter{
 
+	/**
+	 * Carrega dados específicos do usuário
+	 */
 	@Autowired
 	private UserDetailsService userDetailsService;
 	
+	/**
+	 * Manda os dados do usuário
+	 */
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth)throws Exception {
 		auth.userDetailsService(userDetailsService);
 	}
 	
+	/**
+	 * Irá codificar a senha
+	 * @return
+	 */
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 	
+	/**
+	 * Liberar endpoints
+	 */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception{
 		http.authorizeRequests()
