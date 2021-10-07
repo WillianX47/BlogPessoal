@@ -22,6 +22,11 @@ public interface PostagemRepository extends JpaRepository<Postagem, Long> {
 	 */
 	public Optional<Postagem> findAllById(Long id);
 	
+	/**
+	 * Utilizado para pesquisar uma postagem por titulo
+	 * @param textoPostagem
+	 * @return lista de postagens com titulos pesquisados
+	 */
 	public List<Postagem> findAllByTextoPostagemContainingIgnoreCase(String textoPostagem);
 	
 }

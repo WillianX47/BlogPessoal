@@ -14,7 +14,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.sun.istack.NotNull;
 
 /**
  * Classe espelho tabela Postagem no db_blogpessoal
@@ -29,15 +28,14 @@ public class Postagem {
 
 	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 
-	private @NotNull @NotBlank @Size(min = 5, max = 100) String tituloPostagem;
+	private @NotBlank @Size(min = 5, max = 100) String tituloPostagem;
 
-	private @NotNull @NotBlank @Size(min = 5, max = 500) String textoPostagem;
+	private @NotBlank @Size(min = 5, max = 500) String textoPostagem;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataPostagem = new java.sql.Date(System.currentTimeMillis());
 
 	private @ManyToOne @JsonIgnoreProperties("postagem") Tema temaPostagem;
-
 
 	public Tema getTemaPostagem() {
 		return temaPostagem;
@@ -78,7 +76,5 @@ public class Postagem {
 	public void setDataPostagem(Date dataPostagem) {
 		this.dataPostagem = dataPostagem;
 	}
-
-
 
 }

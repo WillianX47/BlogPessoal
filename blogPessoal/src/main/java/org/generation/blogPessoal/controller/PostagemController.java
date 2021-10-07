@@ -55,14 +55,15 @@ public class PostagemController {
 		return postagemRepositorio.findById(id).map(resp -> ResponseEntity.ok(resp))
 				.orElse(ResponseEntity.notFound().build());
 	}
-	
+
 	/**
 	 * Procura de acordo com o texto
+	 * 
 	 * @param texto
 	 * @return
 	 */
 	@GetMapping("/texto/{texto}")
-	public ResponseEntity <List<Postagem>> findAllByTexto(@PathVariable String texto){
+	public ResponseEntity<List<Postagem>> findAllByTexto(@PathVariable String texto) {
 		return ResponseEntity.ok(postagemRepositorio.findAllByTextoPostagemContainingIgnoreCase(texto));
 	}
 
@@ -76,36 +77,39 @@ public class PostagemController {
 	public ResponseEntity<List<Postagem>> findByTitulo(@PathVariable String titulo) {
 		return ResponseEntity.ok(postagemRepositorio.findAllByTituloPostagemContainingIgnoreCase(titulo));
 	}
-	
+
 	/**
 	 * Cria uma nova postagem
+	 * 
 	 * @param novaPostagem
 	 * @return
 	 */
 	@PostMapping("/novaPostagem")
-	public ResponseEntity<Postagem> novaPostagem(@RequestBody Postagem novaPostagem){
+	public ResponseEntity<Postagem> novaPostagem(@RequestBody Postagem novaPostagem) {
 		return ResponseEntity.status(201).body(postagemRepositorio.save(novaPostagem));
 	}
-	
+
 	/**
 	 * Atualiza uma postagem
+	 * 
 	 * @param postagemAtualizada
 	 * @return
 	 */
 	@PutMapping("/atualizarPostagem")
-	public ResponseEntity<Postagem> atualizarPostagem(@Valid @RequestBody Postagem postagemAtualizada){
+	public ResponseEntity<Postagem> atualizarPostagem(@Valid @RequestBody Postagem postagemAtualizada) {
 		return ResponseEntity.status(201).body(postagemRepositorio.save(postagemAtualizada));
 	}
-	
+
 	/**
 	 * Deleta uma postagem por ID
+	 * 
 	 * @param id
 	 * @return
 	 */
 	@DeleteMapping("/deletarPostagem/{id}")
-	public ResponseEntity<Postagem> deletarPostagem(@PathVariable(value = "id") Long id){
+	public ResponseEntity<Postagem> deletarPostagem(@PathVariable(value = "id") Long id) {
 		Optional<Postagem> postagemObj = postagemRepositorio.findById(id);
-		if(postagemObj.isPresent()) {
+		if (postagemObj.isPresent()) {
 			postagemRepositorio.deleteById(id);
 			return ResponseEntity.status(204).build();
 		} else {
