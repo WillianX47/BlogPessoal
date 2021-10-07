@@ -1,5 +1,11 @@
 package org.generation.blogPessoal.model;
 
+/**
+ * Classe espelho de Usuario
+ * @author SistemaIOEstudo
+ *
+ */
+
 public class UserLogin {
 
 	private String nome;
