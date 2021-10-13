@@ -19,6 +19,8 @@ public class Usuario {
 	private @NotBlank @Size(min = 5, max = 100) String usuario;
 	
 	private @NotBlank @Size(min = 5, max = 100) String senha;
+	
+	
 
 	public Long getId() {
 		return id;

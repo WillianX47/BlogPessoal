@@ -41,7 +41,10 @@ public class Postagem {
 	@JsonIgnoreProperties({"postagem"}) 
 	private Tema temaPostagem;
 	
-	
+	@ManyToOne
+	@JoinColumn(name = "usuario_id")
+	@JsonIgnoreProperties({"minhasPostagens"})
+	private Usuario criador;
 
 	public Tema getTemaPostagem() {
 		return temaPostagem;
