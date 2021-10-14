@@ -17,26 +17,54 @@ import springfox.documentation.spring.web.plugins.Docket;
 
 @Configuration
 public class SwaggerConfig {
+
+	/**
+	 * Define a package onde estão as classes do tipo @RestController, para que o
+	 * Swagger mapeie todas as classes e seus respectivos endpoints para montar a
+	 * documentação do projeto.
+	 * 
+	 * @return
+	 */
 	@Bean
 	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2).select()
-				.apis(RequestHandlerSelectors.basePackage("br.org.generation.blogpessoal.controller"))
+				.apis(RequestHandlerSelectors.basePackage("org.generation.blogPessoal.controller"))
 				.paths(PathSelectors.any()).build().apiInfo(metadata()).useDefaultResponseMessages(false)
 				.globalResponses(HttpMethod.GET, responseMessage()).globalResponses(HttpMethod.POST, responseMessage())
 				.globalResponses(HttpMethod.PUT, responseMessage())
 				.globalResponses(HttpMethod.DELETE, responseMessage());
 	}
 
+	/**
+	 * (.title)Define o titulo da sua aplicação que será exibida na documentação.
+	 * (.description)Cria uma descrição para a sua aplicação.
+	 * (.version)Define a versão da sua aplicação
+	 * (.license)Define o tipo de licença da sua aplicação.
+	 * (.licenseUrl)Informa o link de acesso da licença da sua aplicação (geralmente se aplica a licença no
+	 *	Github).
+	 *	Define os dados para contato com o desenvolvedor inseridos no método contact().
+	 * @return
+	 */
 	public static ApiInfo metadata() {
 		return new ApiInfoBuilder().title("API - Blog Pessoal").description("Projeto API Spring - Blog Pessoal")
-				.version("1.0.0").license("Apache License Version 2.0").licenseUrl("https://github.com/rafaelq80")
+				.version("1.0.0").license("Apache License Version 2.0").licenseUrl("https://github.com/WillianX47/BlogPessoal.git")
 				.contact(contact()).build();
 	}
 
+	/**
+	 * Define os dados do Desenvolvedor (Nome, Website e o E-mail).
+	 * @return
+	 */
 	private static Contact contact() {
-		return new Contact("Rafael Queiróz", "https://github.com/rafaelq80", "rafaelproinfo@gmail.com");
+		return new Contact("Willian Souza", "https://github.com/WillianX47", "willianx47@gmail.com");
 	}
 
+	/**
+	 * Define as mensagens personalizadas para os códigos de Resposta do protocolo http (http
+	 * Response) para todos os verbos (GET, POST, PUT e DELETE). Cada linha é referente a um
+	 * Status Code.
+	 * @return
+	 */
 	private static List<Response> responseMessage() {
 		return new ArrayList<Response>() {
 			private static final long serialVersionUID = 1L;
