@@ -1,6 +1,7 @@
 package org.generation.blogPessoal.service;
 
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.commons.codec.binary.Base64;
@@ -8,6 +9,7 @@ import org.generation.blogPessoal.model.UserLogin;
 import org.generation.blogPessoal.model.Usuario;
 import org.generation.blogPessoal.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,15 @@ public class UsuarioService {
 
 	@Autowired
 	private UsuarioRepository repository;
+
+	public ResponseEntity<List<Usuario>> mostrarTodos() {
+		List<Usuario> objetoLista = repository.findAll();
+		if(objetoLista.isEmpty()) {
+			return ResponseEntity.status(204).build();
+		} else {
+			return ResponseEntity.ok(objetoLista);
+		}
+	}
 
 	/**
 	 * Criptografa a senha do usuário
