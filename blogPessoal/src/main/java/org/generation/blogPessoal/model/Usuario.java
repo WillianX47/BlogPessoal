@@ -23,19 +23,19 @@ import io.swagger.annotations.ApiModelProperty;
 public class Usuario {
 
 	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
-	
+
 	private @NotBlank @Size(min = 2, max = 100) String nome;
-	
+
+	private @NotBlank @Size(min = 5, max = 100) String senha;
+
 	@ApiModelProperty(example = "email@email.com.br")
 	@NotBlank(message = "O atributo usuario é obrigatório!")
 	@Email(message = "O atributo usuario deve ser um email valido!")
 	private @Size(min = 5, max = 100) String usuario;
-	
-	private @NotBlank @Size(min = 5, max = 100) String senha;
-	
+
 	@OneToMany(mappedBy = "criador", cascade = CascadeType.REMOVE)
-	@JsonIgnoreProperties({"criador"})
-	private List<Postagem> postagens = new ArrayList<>();
+	@JsonIgnoreProperties({ "criador" })
+	private List<Postagem> minhasPostagens = new ArrayList<>();
 
 	public Long getId() {
 		return id;
@@ -68,5 +68,13 @@ public class Usuario {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-	
+
+	public List<Postagem> getMinhasPostagens() {
+		return minhasPostagens;
+	}
+
+	public void setMinhasPostagens(List<Postagem> minhasPostagens) {
+		this.minhasPostagens = minhasPostagens;
+	}
+
 }

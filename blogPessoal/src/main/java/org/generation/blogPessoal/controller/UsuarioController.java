@@ -22,7 +22,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @RestController
-@RequestMapping("/api/v1/usuarios")
+@RequestMapping("/api/v1/usuario")
 @Api(tags = "Controlador de usuario", description = "Utilitário de usuario")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UsuarioController {

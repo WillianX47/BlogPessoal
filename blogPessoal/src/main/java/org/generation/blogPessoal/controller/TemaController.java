@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping("/tema")
+@RequestMapping("/api/v1/tema")
 public class TemaController {
 	@Autowired
 	private TemaRepository repositorioTema;
@@ -40,7 +40,7 @@ public class TemaController {
 		return ResponseEntity.ok(repositorioTema.findAllByDescricaoTemaContainingIgnoreCase(descricaoTema));
 	}
 	
-	@PostMapping("/addtema")
+	@PostMapping("/criar")
 	public ResponseEntity<Tema> post (@RequestBody Tema tema){
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(repositorioTema.save(tema));

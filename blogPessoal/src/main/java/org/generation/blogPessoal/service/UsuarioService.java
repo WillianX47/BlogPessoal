@@ -21,7 +21,7 @@ public class UsuarioService {
 
 	public ResponseEntity<List<Usuario>> mostrarTodos() {
 		List<Usuario> objetoLista = repository.findAll();
-		if(objetoLista.isEmpty()) {
+		if (objetoLista.isEmpty()) {
 			return ResponseEntity.status(204).build();
 		} else {
 			return ResponseEntity.ok(objetoLista);

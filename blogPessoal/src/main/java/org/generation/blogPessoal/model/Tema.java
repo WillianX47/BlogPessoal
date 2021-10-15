@@ -26,7 +26,7 @@ public class Tema {
 	private @NotNull String descricaoTema;
 
 	@JsonIgnoreProperties("temaPostagem")
-	@OneToMany(mappedBy = "temaPostagem", cascade = CascadeType.ALL) 
+	@OneToMany(mappedBy = "temaPostagem", cascade = CascadeType.REMOVE) 
 	private List<Postagem> postagem = new ArrayList<>();
 	
 	public String getDescricaoTema() {
