@@ -19,6 +19,11 @@ public class UsuarioService {
 	@Autowired
 	private UsuarioRepository repository;
 
+	/**
+	 * Método utilizado para mostrar todos os usuários cadastrados no sistema
+	 * @return Body lista de usuarios
+	 * @author Will
+	 */
 	public ResponseEntity<List<Usuario>> mostrarTodos() {
 		List<Usuario> objetoLista = repository.findAll();
 		if (objetoLista.isEmpty()) {
@@ -29,18 +34,28 @@ public class UsuarioService {
 	}
 
 	/**
-	 * Criptografa a senha do usuário
-	 * 
+	 * Método utilizado para cadastrar um usuário no sistema, verifica se o usuário já existe
 	 * @param usuario
-	 * @return
+	 * @return salva usuário no repositório e retorna um Optional
+	 * @author Will
 	 */
-	public Usuario cadastrarUsuario(Usuario usuario) {
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		String senhaEncoder = encoder.encode(usuario.getSenha());
-		usuario.setSenha(senhaEncoder);
-		return repository.save(usuario);
+	public Optional<Object> cadastrarUsuario(Usuario usuario) {
+		return repository.findByUsuario(usuario.getUsuario()).map(resp -> {
+			return Optional.empty();
+		}).orElseGet(() -> {
+			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+			String senhaEncoder = encoder.encode(usuario.getSenha());
+			usuario.setSenha(senhaEncoder);
+			return Optional.ofNullable(repository.save(usuario));
+		});
+
 	}
 
+	/**
+	 * Utilizado para logar um usuário no sistema
+	 * @param user
+	 * @return retorna um UserLogin
+	 */
 	public Optional<UserLogin> logar(Optional<UserLogin> user) {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		Optional<Usuario> usuario = repository.findByUsuario(user.get().getUsuario());
@@ -51,6 +66,7 @@ public class UsuarioService {
 				String authHeader = "Basic " + new String(encodedAuth);
 
 				user.get().setToken(authHeader);
+				user.get().setUsuario(usuario.get().getUsuario());
 				user.get().setId(usuario.get().getId());
 				user.get().setNome(usuario.get().getNome());
 				user.get().setSenha(usuario.get().getSenha());
