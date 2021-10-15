@@ -31,6 +31,9 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioService usuarioService;
 
+	@ApiOperation(value = "Procura todos os usuários cadastrados no sistema")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Usuários encontrados"),
+			@ApiResponse(code = 204, message = "Não existe usuários no sistema") })
 	@GetMapping
 	public ResponseEntity<List<Usuario>> todosUsuarios() {
 		return usuarioService.mostrarTodos();
@@ -46,7 +49,8 @@ public class UsuarioController {
 	}
 
 	@ApiOperation(value = "Realiza o cadastro de usuario")
-	@ApiResponses(value = { @ApiResponse(code = 201, message = "Cadastro efetuado"), })
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "Cadastro efetuado"),
+			@ApiResponse(code = 400, message = "Usuário já existe no sistema") })
 	@PostMapping("/cadastrar")
 	public ResponseEntity<Object> Post(@RequestBody Usuario usuario) {
 		return usuarioService.cadastrarUsuario(usuario).map(resp -> ResponseEntity.status(201).body(resp))
