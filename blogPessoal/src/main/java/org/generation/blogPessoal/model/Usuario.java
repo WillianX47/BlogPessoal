@@ -18,21 +18,31 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.swagger.annotations.ApiModelProperty;
 
+/**
+ * Cria uma tabela no banco de dados com o nome "tb_usuario"
+ * 
+ * @author Will
+ */
 @Entity
 @Table(name = "tb_usuario")
 public class Usuario {
 
+	// Gera o id automaticamente
 	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 
+	// Cria um atributo de nome
 	private @NotBlank @Size(min = 2, max = 100) String nome;
 
+	// Cria um atributo de senha
 	private @NotBlank @Size(min = 5, max = 100) String senha;
 
+	// Cria um atributo de usuario
 	@ApiModelProperty(example = "email@email.com.br")
 	@NotBlank(message = "O atributo usuario é obrigatório!")
 	@Email(message = "O atributo usuario deve ser um email valido!")
 	private @Size(min = 5, max = 100) String usuario;
 
+	// Link tabela OneToMany para a tabela de postagem
 	@OneToMany(mappedBy = "criador", cascade = CascadeType.REMOVE)
 	@JsonIgnoreProperties({ "criador" })
 	@ApiModelProperty(hidden = true)
