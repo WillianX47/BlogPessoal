@@ -1,6 +1,6 @@
 package org.generation.blogPessoal.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,11 +9,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
@@ -33,8 +32,8 @@ public class Postagem {
 
 	private @NotBlank @Size(min = 5, max = 500) String textoPostagem;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date dataPostagem = new java.sql.Date(System.currentTimeMillis());
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	private LocalDate dataPostagem = LocalDate.now();
 
 	@ManyToOne
 	@JoinColumn(name = "tema_id")
@@ -86,11 +85,11 @@ public class Postagem {
 		this.textoPostagem = textoPostagem;
 	}
 
-	public Date getDataPostagem() {
+	public LocalDate getDataPostagem() {
 		return dataPostagem;
 	}
 
-	public void setDataPostagem(Date dataPostagem) {
+	public void setDataPostagem(LocalDate dataPostagem) {
 		this.dataPostagem = dataPostagem;
 	}
 
