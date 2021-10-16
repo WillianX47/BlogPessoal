@@ -14,6 +14,7 @@ public interface PostagemRepository extends JpaRepository<Postagem, Long> {
 	 * Procura todos os titulos ignorando case
 	 * @param titulo
 	 * @return lista de postagens com o titulo solicitado
+	 * @author Will
 	 */
 	public List<Postagem> findAllByTituloPostagemContainingIgnoreCase(String tituloPostagem);
 
@@ -21,6 +22,7 @@ public interface PostagemRepository extends JpaRepository<Postagem, Long> {
 	 * Procura todos os id
 	 * @param id
 	 * @return Objeto Optional de postagem encontrado pelo id
+	 * @author Will
 	 */
 	public Optional<Postagem> findAllById(Long id);
 	
@@ -28,6 +30,7 @@ public interface PostagemRepository extends JpaRepository<Postagem, Long> {
 	 * Utilizado para pesquisar uma postagem por titulo
 	 * @param textoPostagem
 	 * @return lista de postagens com titulos pesquisados
+	 * @author Will
 	 */
 	public List<Postagem> findAllByTextoPostagemContainingIgnoreCase(String textoPostagem);
 	
