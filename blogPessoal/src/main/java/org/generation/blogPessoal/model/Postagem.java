@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
- * Classe espelho tabela Postagem no db_blogpessoal
+ * Cria uma tabela no banco de dados com o nome "tb_postagem"
  * 
  * @author Will
  *
@@ -26,20 +26,29 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Table(name = "tb_postagem")
 public class Postagem {
 
+	// Gera o id automaticamente
 	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 
+	// Cria um atributo de tituloPostagem
 	private @NotBlank @Size(min = 5, max = 100) String tituloPostagem;
 
+	// Cria um atributo de textoPostagem
 	private @NotBlank @Size(min = 5, max = 500) String textoPostagem;
 
+	/**
+	 * Cria um atributo de dataPostagem com o horário atual do computador, utiliza o
+	 * pattern indicado abaixo
+	 */
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dataPostagem = LocalDate.now();
 
+	// Link tabela ManyToOne para a tabela de tb_tema
 	@ManyToOne
 	@JoinColumn(name = "tema_id")
 	@JsonIgnoreProperties({ "postagem" })
 	private Tema temaPostagem;
 
+	// Link tabela OneToMany para a tabela de tb_usuario
 	@ManyToOne
 	@JoinColumn(name = "usuario_id")
 	@JsonIgnoreProperties({ "minhasPostagens" })
