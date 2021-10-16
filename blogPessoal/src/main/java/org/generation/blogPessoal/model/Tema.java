@@ -16,22 +16,27 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.swagger.annotations.ApiModelProperty;
 
+/**
+ * Cria uma tabela no banco de dados com o nome "tb_tema"
+ * 
+ * @author Will
+ */
 @Entity
 @Table(name = "tb_tema")
 public class Tema {
 
-	/**
-	 * Id de tema
-	 */
+	// Gera o id do atributo tema automaticamente
 	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 
+	// Cria um atributo de descriçãoTema
 	private @NotNull String descricaoTema;
 
+	// Link tabela OneToMany para a tabela de postagem
 	@JsonIgnoreProperties("temaPostagem")
 	@OneToMany(mappedBy = "temaPostagem", cascade = CascadeType.REMOVE)
 	@ApiModelProperty(hidden = true)
 	private List<Postagem> postagem = new ArrayList<>();
-	
+
 	public String getDescricaoTema() {
 		return descricaoTema;
 	}
