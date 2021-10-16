@@ -55,6 +55,7 @@ public class UsuarioService {
 	 * Utilizado para logar um usuário no sistema
 	 * @param user
 	 * @return retorna um UserLogin
+	 * @author Will
 	 */
 	public Optional<UserLogin> logar(Optional<UserLogin> user) {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
