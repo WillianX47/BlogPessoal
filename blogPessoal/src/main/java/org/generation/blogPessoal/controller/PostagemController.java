@@ -34,7 +34,7 @@ public class PostagemController {
 	private PostagemRepository repository;
 
 	@ApiOperation(value = "Procura todas as postagens cadastradas no sistema")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Postagens encontradas encontrados"),
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Postagens encontradas"),
 			@ApiResponse(code = 204, message = "Não existe postagens no sistema") })
 	@GetMapping
 	public ResponseEntity<List<Postagem>> findAllPostagens() {
