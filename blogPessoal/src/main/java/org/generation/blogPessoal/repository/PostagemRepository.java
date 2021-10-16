@@ -5,20 +5,22 @@ import java.util.Optional;
 
 import org.generation.blogPessoal.model.Postagem;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface PostagemRepository extends JpaRepository<Postagem, Long> {
 	
 	/**
 	 * Procura todos os titulos ignorando case
 	 * @param titulo
-	 * @return
+	 * @return lista de postagens com o titulo solicitado
 	 */
 	public List<Postagem> findAllByTituloPostagemContainingIgnoreCase(String tituloPostagem);
 
 	/**
 	 * Procura todos os id
 	 * @param id
-	 * @return
+	 * @return Objeto Optional de postagem encontrado pelo id
 	 */
 	public Optional<Postagem> findAllById(Long id);
 	
