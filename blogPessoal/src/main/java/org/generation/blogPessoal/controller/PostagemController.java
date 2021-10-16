@@ -17,26 +17,28 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping("/api/v1/postagem")
+@Api(tags = "Controlador de Postagem", description = "Utilitário de postagem")
 @CrossOrigin("*")
 public class PostagemController {
 
 	@Autowired
-	private PostagemRepository postagemRepositorio;
+	private PostagemRepository repository;
 
-	/**
-	 * Retorna a lista inteira, senão, retorna status 204
-	 * 
-	 * @author Will
-	 * @return
-	 */
+	@ApiOperation(value = "Procura todas as postagens cadastradas no sistema")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Postagens encontradas encontrados"),
+			@ApiResponse(code = 204, message = "Não existe postagens no sistema") })
 	@GetMapping
 	public ResponseEntity<List<Postagem>> findAllPostagens() {
-		List<Postagem> objetoLista = postagemRepositorio.findAll();
+		List<Postagem> objetoLista = repository.findAll();
 		if (objetoLista.isEmpty()) {
 			return ResponseEntity.status(204).build();
 		} else {
@@ -44,76 +46,71 @@ public class PostagemController {
 		}
 	}
 
-	/**
-	 * Retorna o id procurado pelo usuário
-	 * 
-	 * @param id
-	 * @return
-	 */
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@ApiOperation(value = "Procura uma postagem por id")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Postagem encontrada"),
+			@ApiResponse(code = 404, message = "Não existe postagem com esse id") })
+	@GetMapping("/{id}")
 	public ResponseEntity<Postagem> findAllById(@PathVariable Long id) {
-		return postagemRepositorio.findById(id).map(resp -> ResponseEntity.ok(resp))
+		return repository.findById(id).map(resp -> ResponseEntity.ok(resp))
 				.orElse(ResponseEntity.notFound().build());
 	}
 
-	/**
-	 * Procura de acordo com o texto
-	 * 
-	 * @param texto
-	 * @return
-	 */
+	@ApiOperation(value = "Procura todas as postagens cadastradas no sistema pelo texto")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Postagens encontradas"),
+			@ApiResponse(code = 204, message = "Não existe postagens no sistema com esse texto") })
 	@GetMapping("/texto/{texto}")
 	public ResponseEntity<List<Postagem>> findAllByTexto(@PathVariable String texto) {
-		return ResponseEntity.ok(postagemRepositorio.findAllByTextoPostagemContainingIgnoreCase(texto));
-	}
-
-	/**
-	 * Retorna o titulo procurado pelo usuário
-	 * 
-	 * @param titulo
-	 * @return
-	 */
-	@GetMapping("/titulo/{titulo}")
-	public ResponseEntity<List<Postagem>> findByTitulo(@PathVariable String titulo) {
-		return ResponseEntity.ok(postagemRepositorio.findAllByTituloPostagemContainingIgnoreCase(titulo));
-	}
-
-	/**
-	 * Cria uma nova postagem
-	 * 
-	 * @param novaPostagem
-	 * @return
-	 */
-	@PostMapping("/novaPostagem")
-	public ResponseEntity<Postagem> novaPostagem(@RequestBody Postagem novaPostagem) {
-		return ResponseEntity.status(201).body(postagemRepositorio.save(novaPostagem));
-	}
-
-	/**
-	 * Atualiza uma postagem
-	 * 
-	 * @param postagemAtualizada
-	 * @return
-	 */
-	@PutMapping("/atualizarPostagem")
-	public ResponseEntity<Postagem> atualizarPostagem(@Valid @RequestBody Postagem postagemAtualizada) {
-		return ResponseEntity.status(201).body(postagemRepositorio.save(postagemAtualizada));
-	}
-
-	/**
-	 * Deleta uma postagem por ID
-	 * 
-	 * @param id
-	 * @return
-	 */
-	@DeleteMapping("/deletarPostagem/{id}")
-	public ResponseEntity<Postagem> deletarPostagem(@PathVariable(value = "id") Long id) {
-		Optional<Postagem> postagemObj = postagemRepositorio.findById(id);
-		if (postagemObj.isPresent()) {
-			postagemRepositorio.deleteById(id);
+		List<Postagem> objetoLista = repository.findAllByTextoPostagemContainingIgnoreCase(texto);
+		if (objetoLista.isEmpty()) {
 			return ResponseEntity.status(204).build();
 		} else {
+			return ResponseEntity.ok(objetoLista);
+		}
+	}
+
+	@ApiOperation(value = "Procura todas as postagens cadastradas no sistema pelo titulo")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Postagens encontradas"),
+			@ApiResponse(code = 204, message = "Não existe postagens no sistema com esse titulo") })
+	@GetMapping("/titulo/{titulo}")
+	public ResponseEntity<List<Postagem>> findByTitulo(@PathVariable String titulo) {
+		return ResponseEntity.ok(repository.findAllByTituloPostagemContainingIgnoreCase(titulo));
+	}
+
+	@ApiOperation(value = "Salva uma postagem no sistema")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Postagem salva"),
+			@ApiResponse(code = 404, message = "Erro no body solicitado") })
+	@PostMapping("/novaPostagem")
+	public ResponseEntity<Postagem> novaPostagem(@RequestBody Postagem novaPostagem) {
+		return ResponseEntity.status(201).body(repository.save(novaPostagem));
+	}
+
+	@ApiOperation(value = "Salva uma postagem no sistema")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Postagem salva"),
+			@ApiResponse(code = 404, message = "Erro no body solicitado") })
+	@PutMapping("/atualizarPostagem/{id}")
+	public ResponseEntity<Postagem> atualizarPostagem(@Valid @RequestBody Postagem postagemAtualizada,
+			@PathVariable Long id) {
+		return repository.findById(id).map(resp -> {
+			resp.setTituloPostagem(postagemAtualizada.getTituloPostagem());
+			resp.setTextoPostagem(postagemAtualizada.getTextoPostagem());
+			resp.setDataPostagem(postagemAtualizada.getDataPostagem());
+			return ResponseEntity.ok(repository.save(resp));
+		}).orElseGet(() -> {
 			return ResponseEntity.status(404).build();
+		});
+	}
+
+	@ApiOperation(value = "Deleta uma postagem no sistema pelo id")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Postagem deletada"),
+			@ApiResponse(code = 400, message = "Não existe postagem com esse id") })
+	@DeleteMapping("/deletarPostagem/{id}")
+	public ResponseEntity<Postagem> deletarPostagem(@PathVariable(value = "id") Long id) {
+		Optional<Postagem> objetoPostagem = repository.findById(id);
+		if (objetoPostagem.isPresent()) {
+			repository.deleteById(id);
+			return ResponseEntity.status(200).build();
+		} else {
+			return ResponseEntity.status(400).build();
 		}
 	}
 

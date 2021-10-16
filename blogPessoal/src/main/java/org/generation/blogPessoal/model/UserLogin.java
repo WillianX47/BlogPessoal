@@ -8,6 +8,8 @@ package org.generation.blogPessoal.model;
  */
 
 public class UserLogin {
+	
+	private Long id;
 
 	private String nome;
 
@@ -16,8 +18,6 @@ public class UserLogin {
 	private String senha;
 
 	private String token;
-
-	private Long id;
 
 	public Long getId() {
 		return id;

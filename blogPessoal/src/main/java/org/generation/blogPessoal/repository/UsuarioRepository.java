@@ -9,6 +9,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 
+	/**
+	 * Utilizado para pesquisar uma postagem por usuario
+	 * @param Usuario
+	 * @return Objeto Optional com o atributo Usuario
+	 * @author Will
+	 */
 	public Optional<Usuario> findByUsuario(String Usuario);
 	
 }
