@@ -14,6 +14,8 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import io.swagger.annotations.ApiModelProperty;
+
 @Entity
 @Table(name = "tb_tema")
 public class Tema {
@@ -26,7 +28,8 @@ public class Tema {
 	private @NotNull String descricaoTema;
 
 	@JsonIgnoreProperties("temaPostagem")
-	@OneToMany(mappedBy = "temaPostagem", cascade = CascadeType.REMOVE) 
+	@OneToMany(mappedBy = "temaPostagem", cascade = CascadeType.REMOVE)
+	@ApiModelProperty(hidden = true)
 	private List<Postagem> postagem = new ArrayList<>();
 	
 	public String getDescricaoTema() {

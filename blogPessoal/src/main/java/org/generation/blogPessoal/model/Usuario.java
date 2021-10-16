@@ -35,6 +35,7 @@ public class Usuario {
 
 	@OneToMany(mappedBy = "criador", cascade = CascadeType.REMOVE)
 	@JsonIgnoreProperties({ "criador" })
+	@ApiModelProperty(hidden = true)
 	private List<Postagem> minhasPostagens = new ArrayList<>();
 
 	public Long getId() {
