@@ -25,7 +25,7 @@ import io.swagger.annotations.ApiModelProperty;
 @Table(name = "tb_tema")
 public class Tema {
 
-	// Gera o id do atributo tema automaticamente
+	// Gera o id automaticamente
 	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 
 	// Cria um atributo de descriçãoTema
