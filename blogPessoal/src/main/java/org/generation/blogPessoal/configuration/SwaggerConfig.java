@@ -1,17 +1,12 @@
 package org.generation.blogPessoal.configuration;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.builders.ResponseBuilder;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
-import springfox.documentation.service.Response;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
@@ -23,7 +18,7 @@ public class SwaggerConfig {
 	 * Swagger mapeie todas as classes e seus respectivos endpoints para montar a
 	 * documentação do projeto.
 	 * @author Will
-	 * @return
+	 * @return Docket
 	 */
 	@Bean
 	public Docket api() {
@@ -41,7 +36,7 @@ public class SwaggerConfig {
 	 *	Github).
 	 *	Define os dados para contato com o desenvolvedor inseridos no método contact().
 	 * @author Will
-	 * @return
+	 * @return ApiInfo
 	 */
 	public static ApiInfo metadata() {
 		return new ApiInfoBuilder().title("API - Blog Pessoal").description("Projeto API Spring - Blog Pessoal")
@@ -51,7 +46,7 @@ public class SwaggerConfig {
 
 	/**
 	 * Define os dados do Desenvolvedor (Nome, Website e o E-mail).
-	 * @return
+	 * @return Contact
 	 */
 	private static Contact contact() {
 		return new Contact("Willian Souza", "https://github.com/WillianX47", "willianx47@gmail.com");

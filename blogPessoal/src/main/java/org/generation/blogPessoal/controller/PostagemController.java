@@ -49,7 +49,7 @@ public class PostagemController {
 	@ApiOperation(value = "Procura uma postagem por id")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Postagem encontrada"),
 			@ApiResponse(code = 404, message = "Não existe postagem com esse id") })
-	@RequestMapping("/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<Postagem> findAllById(@PathVariable Long id) {
 		return repository.findById(id).map(resp -> ResponseEntity.ok(resp))
 				.orElse(ResponseEntity.notFound().build());
