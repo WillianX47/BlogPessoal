@@ -1,13 +1,13 @@
 package org.generation.blogPessoal.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.generation.blogPessoal.model.Tema;
 import org.generation.blogPessoal.repository.TemaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -95,13 +96,12 @@ public class TemaController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Tema deletado"),
 			@ApiResponse(code = 400, message = "Não existe um tema com esse id") })
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Tema> delete(@PathVariable Long id) {
-		Optional<Tema> objetoOptional = repository.findById(id);
-		if(objetoOptional.isPresent()) {
+	public ResponseEntity<Object> delete(@PathVariable Long id) {
+		return repository.findById(id).map(resp -> {
 			repository.deleteById(id);
 			return ResponseEntity.status(200).build();
-		} else {
-			return ResponseEntity.status(400).build();
-		}
+		}).orElseThrow(() -> {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Digite um id válido");
+		});
 	}
 }
