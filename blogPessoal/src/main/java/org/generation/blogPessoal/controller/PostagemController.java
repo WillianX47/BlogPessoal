@@ -1,13 +1,13 @@
 package org.generation.blogPessoal.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.generation.blogPessoal.model.Postagem;
 import org.generation.blogPessoal.repository.PostagemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -51,8 +52,7 @@ public class PostagemController {
 			@ApiResponse(code = 404, message = "Não existe postagem com esse id") })
 	@GetMapping("/{id}")
 	public ResponseEntity<Postagem> findAllById(@PathVariable Long id) {
-		return repository.findById(id).map(resp -> ResponseEntity.ok(resp))
-				.orElse(ResponseEntity.notFound().build());
+		return repository.findById(id).map(resp -> ResponseEntity.ok(resp)).orElse(ResponseEntity.notFound().build());
 	}
 
 	@ApiOperation(value = "Procura todas as postagens cadastradas no sistema pelo texto")
@@ -104,14 +104,12 @@ public class PostagemController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Postagem deletada"),
 			@ApiResponse(code = 400, message = "Não existe postagem com esse id") })
 	@DeleteMapping("/deletarPostagem/{id}")
-	public ResponseEntity<Postagem> deletarPostagem(@PathVariable(value = "id") Long id) {
-		Optional<Postagem> objetoPostagem = repository.findById(id);
-		if (objetoPostagem.isPresent()) {
+	public ResponseEntity<Object> deletarPostagem(@PathVariable(value = "id") Long id) {
+		return repository.findById(id).map(resp -> {
 			repository.deleteById(id);
 			return ResponseEntity.status(200).build();
-		} else {
-			return ResponseEntity.status(400).build();
-		}
+		}).orElseThrow(() -> {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Digite um id válido");
+		});
 	}
-
 }
