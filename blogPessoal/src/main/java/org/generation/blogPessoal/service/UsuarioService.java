@@ -9,9 +9,11 @@ import org.generation.blogPessoal.model.UserLogin;
 import org.generation.blogPessoal.model.Usuario;
 import org.generation.blogPessoal.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class UsuarioService {
@@ -72,8 +74,10 @@ public class UsuarioService {
 				user.get().setNome(usuario.get().getNome());
 				user.get().setSenha(usuario.get().getSenha());
 				return user;
+			} else {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Senha incorreta!");
 			}
 		}
-		return null;
+		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email incorreto!");
 	}
 }
