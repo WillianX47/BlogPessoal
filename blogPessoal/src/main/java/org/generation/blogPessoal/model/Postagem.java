@@ -1,22 +1,22 @@
 package org.generation.blogPessoal.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
- * Classe espelho tabela Postagem no db_blogpessoal
+ * Cria uma tabela no banco de dados com o nome "tb_postagem"
  * 
  * @author Will
  *
@@ -26,16 +26,41 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Table(name = "tb_postagem")
 public class Postagem {
 
+	// Gera o id automaticamente
 	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
 
+	// Cria um atributo de tituloPostagem
 	private @NotBlank @Size(min = 5, max = 100) String tituloPostagem;
 
+	// Cria um atributo de textoPostagem
 	private @NotBlank @Size(min = 5, max = 500) String textoPostagem;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date dataPostagem = new java.sql.Date(System.currentTimeMillis());
+	/**
+	 * Cria um atributo de dataPostagem com o horário atual do computador, utiliza o
+	 * pattern indicado abaixo
+	 */
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	private LocalDate dataPostagem = LocalDate.now();
 
-	private @ManyToOne @JsonIgnoreProperties("postagem") Tema temaPostagem;
+	// Link tabela ManyToOne para a tabela de tb_tema
+	@ManyToOne
+	@JoinColumn(name = "tema_id")
+	@JsonIgnoreProperties({ "postagem" })
+	private Tema temaPostagem;
+
+	// Link tabela OneToMany para a tabela de tb_usuario
+	@ManyToOne
+	@JoinColumn(name = "usuario_id")
+	@JsonIgnoreProperties({ "minhasPostagens" })
+	private Usuario criador;
+
+	public Usuario getCriador() {
+		return criador;
+	}
+
+	public void setCriador(Usuario criador) {
+		this.criador = criador;
+	}
 
 	public Tema getTemaPostagem() {
 		return temaPostagem;
@@ -69,11 +94,11 @@ public class Postagem {
 		this.textoPostagem = textoPostagem;
 	}
 
-	public Date getDataPostagem() {
+	public LocalDate getDataPostagem() {
 		return dataPostagem;
 	}
 
-	public void setDataPostagem(Date dataPostagem) {
+	public void setDataPostagem(LocalDate dataPostagem) {
 		this.dataPostagem = dataPostagem;
 	}
 
