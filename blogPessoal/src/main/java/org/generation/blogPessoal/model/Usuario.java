@@ -36,6 +36,12 @@ public class Usuario {
 	// Cria um atributo de senha
 	private @NotBlank @Size(min = 5, max = 100) String senha;
 
+	// Cria um atributo do tipo foto
+	private String foto;
+	
+	//Cria um atributo do tipo tipo
+	private String tipo;
+	
 	// Cria um atributo de usuario
 	@ApiModelProperty(example = "email@email.com.br")
 	@NotBlank(message = "O atributo usuario é obrigatório!")
@@ -47,6 +53,22 @@ public class Usuario {
 	@JsonIgnoreProperties({ "criador" })
 	@ApiModelProperty(hidden = true)
 	private List<Postagem> minhasPostagens = new ArrayList<>();
+	
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
 
 	public Long getId() {
 		return id;
