@@ -56,6 +56,13 @@ public class UsuarioService {
 
 	}
 
+	/**
+	 * Método utilizado para encontrar um usuário pelo id no sistema
+	 * 
+	 * @param id
+	 * @return Usuário
+	 * @author Will
+	 */
 	public ResponseEntity<Usuario> findByIdUsuario(Long id) {
 		return repository.findById(id).map(resp -> ResponseEntity.ok(resp)).orElse(ResponseEntity.notFound().build());
 	}
