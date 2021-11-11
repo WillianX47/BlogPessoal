@@ -23,6 +23,7 @@ public class UsuarioService {
 
 	/**
 	 * Método utilizado para mostrar todos os usuários cadastrados no sistema
+	 * 
 	 * @return Body lista de usuarios
 	 * @author Will
 	 */
@@ -36,7 +37,9 @@ public class UsuarioService {
 	}
 
 	/**
-	 * Método utilizado para cadastrar um usuário no sistema, verifica se o usuário já existe
+	 * Método utilizado para cadastrar um usuário no sistema, verifica se o usuário
+	 * já existe
+	 * 
 	 * @param usuario
 	 * @return salva usuário no repositório e retorna um Optional
 	 * @author Will
@@ -53,8 +56,13 @@ public class UsuarioService {
 
 	}
 
+	public ResponseEntity<Usuario> findByIdUsuario(Long id) {
+		return repository.findById(id).map(resp -> ResponseEntity.ok(resp)).orElse(ResponseEntity.notFound().build());
+	}
+
 	/**
 	 * Utilizado para logar um usuário no sistema
+	 * 
 	 * @param user
 	 * @return retorna um UserLogin
 	 * @author Will

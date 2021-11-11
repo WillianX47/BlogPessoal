@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +39,12 @@ public class UsuarioController {
 	public ResponseEntity<List<Usuario>> todosUsuarios() {
 		return usuarioService.mostrarTodos();
 	}
-
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<Usuario> findByIdUsuario(@PathVariable Long id){
+		return usuarioService.findByIdUsuario(id);
+	}
+ 
 	@ApiOperation(value = "Executa o login de usuario")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Login efetuado"),
 			@ApiResponse(code = 401, message = "Usuario ou senha incorreto") })
