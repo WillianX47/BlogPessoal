@@ -48,7 +48,7 @@ public class TemaController {
 
 	@ApiOperation(value = "Procura um tema pelo id")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Tema encontrado"),
-			@ApiResponse(code = 404, message = "Não existe tema com esse id") })
+			@ApiResponse(code = 400, message = "Não existe tema com esse id") })
 	@GetMapping("/{id}")
 	public ResponseEntity<Tema> getById(@PathVariable Long id) {
 		return repository.findById(id).map(resp -> ResponseEntity.ok(resp)).orElse(ResponseEntity.notFound().build());
@@ -82,9 +82,9 @@ public class TemaController {
 	@ApiOperation(value = "Atualiza um tema no sistema")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Tema atualizado"),
 			@ApiResponse(code = 400, message = "Não existe um tema com esse id") })
-	@PutMapping("/atualizar/{id}")
-	public ResponseEntity<Tema> put(@Valid @RequestBody Tema tema, @PathVariable Long id) {
-		return repository.findById(id).map(resp -> {
+	@PutMapping("/atualizar")
+	public ResponseEntity<Tema> put(@Valid @RequestBody Tema tema) {
+		return repository.findById(tema.getId()).map(resp -> {
 			resp.setDescricaoTema(tema.getDescricaoTema());
 			return ResponseEntity.ok(repository.save(resp));
 		}).orElseGet(() -> {

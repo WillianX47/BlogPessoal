@@ -49,7 +49,7 @@ public class PostagemController {
 
 	@ApiOperation(value = "Procura uma postagem por id")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Postagem encontrada"),
-			@ApiResponse(code = 404, message = "Não existe postagem com esse id") })
+			@ApiResponse(code = 400, message = "Não existe postagem com esse id") })
 	@GetMapping("/{id}")
 	public ResponseEntity<Postagem> findAllById(@PathVariable Long id) {
 		return repository.findById(id).map(resp -> ResponseEntity.ok(resp)).orElse(ResponseEntity.notFound().build());
@@ -78,7 +78,7 @@ public class PostagemController {
 
 	@ApiOperation(value = "Salva uma postagem no sistema")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Postagem salva"),
-			@ApiResponse(code = 404, message = "Erro no body solicitado") })
+			@ApiResponse(code = 400, message = "Erro no body solicitado") })
 	@PostMapping("/novaPostagem")
 	public ResponseEntity<Postagem> novaPostagem(@RequestBody Postagem novaPostagem) {
 		return ResponseEntity.status(201).body(repository.save(novaPostagem));
@@ -86,17 +86,16 @@ public class PostagemController {
 
 	@ApiOperation(value = "Salva uma postagem no sistema")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Postagem salva"),
-			@ApiResponse(code = 404, message = "Erro no body solicitado") })
-	@PutMapping("/atualizarPostagem/{id}")
-	public ResponseEntity<Postagem> atualizarPostagem(@Valid @RequestBody Postagem postagemAtualizada,
-			@PathVariable Long id) {
-		return repository.findById(id).map(resp -> {
+			@ApiResponse(code = 400, message = "Erro no body solicitado") })
+	@PutMapping("/atualizarPostagem")
+	public ResponseEntity<Postagem> atualizarPostagem(@Valid @RequestBody Postagem postagemAtualizada) {
+		return repository.findById(postagemAtualizada.getId()).map(resp -> {
 			resp.setTituloPostagem(postagemAtualizada.getTituloPostagem());
 			resp.setTextoPostagem(postagemAtualizada.getTextoPostagem());
 			resp.setDataPostagem(postagemAtualizada.getDataPostagem());
 			return ResponseEntity.ok(repository.save(resp));
 		}).orElseGet(() -> {
-			return ResponseEntity.status(404).build();
+			return ResponseEntity.status(400).build();
 		});
 	}
 
