@@ -40,6 +40,9 @@ public class UsuarioController {
 		return usuarioService.mostrarTodos();
 	}
 	
+	@ApiOperation(value = "Procura um usuário por id")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Usuário encontrado"),
+			@ApiResponse(code = 404, message = "Não existe usuário com este id no sistema") })
 	@GetMapping("/{id}")
 	public ResponseEntity<Usuario> findByIdUsuario(@PathVariable Long id){
 		return usuarioService.findByIdUsuario(id);
