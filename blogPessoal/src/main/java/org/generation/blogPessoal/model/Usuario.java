@@ -38,10 +38,10 @@ public class Usuario {
 
 	// Cria um atributo do tipo foto
 	private String foto;
-	
-	//Cria um atributo do tipo tipo
+
+	// Cria um atributo do tipo tipo
 	private String tipo;
-	
+
 	// Cria um atributo de usuario
 	@ApiModelProperty(example = "email@email.com.br")
 	@NotBlank(message = "O atributo usuario é obrigatório!")
@@ -51,9 +51,8 @@ public class Usuario {
 	// Link tabela OneToMany para a tabela de postagem
 	@OneToMany(mappedBy = "criador", cascade = CascadeType.REMOVE)
 	@JsonIgnoreProperties({ "criador" })
-	@ApiModelProperty(hidden = true)
 	private List<Postagem> minhasPostagens = new ArrayList<>();
-	
+
 	public String getFoto() {
 		return foto;
 	}
