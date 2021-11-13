@@ -36,6 +36,12 @@ public class UsuarioService {
 		}
 	}
 	
+	/**
+	 * Método utilizado para atualizar um cadastro
+	 * 
+	 * @return Ok
+	 * @author Will
+	 */
 	public ResponseEntity<Usuario> atualizarCadastro(Usuario usuario){
 		return repository.findById(usuario.getId()).map(resp -> {
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
