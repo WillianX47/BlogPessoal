@@ -35,6 +35,22 @@ public class UsuarioService {
 			return ResponseEntity.ok(objetoLista);
 		}
 	}
+	
+	public ResponseEntity<Usuario> atualizarCadastro(Usuario usuario){
+		return repository.findById(usuario.getId()).map(resp -> {
+			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+			String senhaEncoder = encoder.encode(usuario.getSenha());
+			usuario.setSenha(senhaEncoder);
+			resp.setNome(usuario.getNome());
+			resp.setUsuario(usuario.getUsuario());
+			resp.setSenha(usuario.getSenha());
+			resp.setFoto(usuario.getFoto());
+			resp.setTipo(usuario.getTipo());
+			return ResponseEntity.ok(repository.save(resp));
+		}).orElseGet(() -> {
+			return ResponseEntity.badRequest().build();
+		});
+	}
 
 	/**
 	 * Método utilizado para cadastrar um usuário no sistema, verifica se o usuário
