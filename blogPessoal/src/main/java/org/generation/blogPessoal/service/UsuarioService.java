@@ -21,10 +21,15 @@ public class UsuarioService {
 	@Autowired
 	private UsuarioRepository repository;
 	
+	/**
+	 * Método utilizado para criptografar a senha
+	 * 
+	 * @return String
+	 * @author Will
+	 */
 	public String bcrypt(String senha) {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		String senhaEncoder = encoder.encode(senha);
-		return senhaEncoder;
+		return encoder.encode(senha);
 	}
 
 	/**
