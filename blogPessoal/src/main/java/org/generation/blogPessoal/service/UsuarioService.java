@@ -32,6 +32,12 @@ public class UsuarioService {
 		return encoder.encode(senha);
 	}
 	
+	/**
+	 * Método utilizado para gerar o token do usuário autenticado com sucesso
+	 * 
+	 * @return String
+	 * @author Will
+	 */
 	public String gerarToken(String email, String senha) {
 		String auth = email + ":" + senha;
 		byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("US-ASCII")));
