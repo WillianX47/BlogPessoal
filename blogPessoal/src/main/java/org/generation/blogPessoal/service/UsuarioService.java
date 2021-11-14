@@ -20,6 +20,12 @@ public class UsuarioService {
 
 	@Autowired
 	private UsuarioRepository repository;
+	
+	public String bcrypt(String senha) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		String senhaEncoder = encoder.encode(senha);
+		return senhaEncoder;
+	}
 
 	/**
 	 * Método utilizado para mostrar todos os usuários cadastrados no sistema
@@ -44,9 +50,7 @@ public class UsuarioService {
 	 */
 	public ResponseEntity<Usuario> atualizarCadastro(Usuario usuario){
 		return repository.findById(usuario.getId()).map(resp -> {
-			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-			String senhaEncoder = encoder.encode(usuario.getSenha());
-			usuario.setSenha(senhaEncoder);
+			usuario.setSenha(bcrypt(usuario.getSenha()));
 			resp.setNome(usuario.getNome());
 			resp.setUsuario(usuario.getUsuario());
 			resp.setSenha(usuario.getSenha());
@@ -70,9 +74,7 @@ public class UsuarioService {
 		return repository.findByUsuario(usuario.getUsuario()).map(resp -> {
 			return Optional.empty();
 		}).orElseGet(() -> {
-			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-			String senhaEncoder = encoder.encode(usuario.getSenha());
-			usuario.setSenha(senhaEncoder);
+			usuario.setSenha(bcrypt(usuario.getSenha()));
 			return Optional.ofNullable(repository.save(usuario));
 		});
 
