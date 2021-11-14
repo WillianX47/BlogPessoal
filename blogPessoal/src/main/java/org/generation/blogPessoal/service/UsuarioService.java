@@ -20,7 +20,7 @@ public class UsuarioService {
 
 	@Autowired
 	private UsuarioRepository repository;
-	
+
 	/**
 	 * Método utilizado para criptografar a senha
 	 * 
@@ -30,6 +30,12 @@ public class UsuarioService {
 	public String bcrypt(String senha) {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		return encoder.encode(senha);
+	}
+	
+	public String gerarToken(String email, String senha) {
+		String auth = email + ":" + senha;
+		byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("US-ASCII")));
+		return "Basic " + new String(encodedAuth);
 	}
 
 	/**
@@ -46,14 +52,14 @@ public class UsuarioService {
 			return ResponseEntity.ok(objetoLista);
 		}
 	}
-	
+
 	/**
 	 * Método utilizado para atualizar um cadastro
 	 * 
 	 * @return Ok
 	 * @author Will
 	 */
-	public ResponseEntity<Usuario> atualizarCadastro(Usuario usuario){
+	public ResponseEntity<Usuario> atualizarCadastro(Usuario usuario) {
 		return repository.findById(usuario.getId()).map(resp -> {
 			usuario.setSenha(bcrypt(usuario.getSenha()));
 			resp.setNome(usuario.getNome());
@@ -108,11 +114,7 @@ public class UsuarioService {
 		Optional<Usuario> usuario = repository.findByUsuario(user.get().getUsuario());
 		if (usuario.isPresent()) {
 			if (encoder.matches(user.get().getSenha(), usuario.get().getSenha())) {
-				String auth = user.get().getUsuario() + ":" + user.get().getSenha();
-				byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("US-ASCII")));
-				String authHeader = "Basic " + new String(encodedAuth);
-
-				user.get().setToken(authHeader);
+				user.get().setToken(gerarToken(user.get().getUsuario(), user.get().getSenha()));
 				user.get().setUsuario(usuario.get().getUsuario());
 				user.get().setId(usuario.get().getId());
 				user.get().setNome(usuario.get().getNome());
