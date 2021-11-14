@@ -22,7 +22,31 @@ public class UsuarioService {
 	private UsuarioRepository repository;
 
 	/**
+	 * Método utilizado para criptografar a senha
+	 * 
+	 * @return String
+	 * @author Will
+	 */
+	public String bcrypt(String senha) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		return encoder.encode(senha);
+	}
+	
+	/**
+	 * Método utilizado para gerar o token do usuário autenticado com sucesso
+	 * 
+	 * @return String
+	 * @author Will
+	 */
+	public String gerarToken(String email, String senha) {
+		String auth = email + ":" + senha;
+		byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("US-ASCII")));
+		return "Basic " + new String(encodedAuth);
+	}
+
+	/**
 	 * Método utilizado para mostrar todos os usuários cadastrados no sistema
+	 * 
 	 * @return Body lista de usuarios
 	 * @author Will
 	 */
@@ -36,7 +60,29 @@ public class UsuarioService {
 	}
 
 	/**
-	 * Método utilizado para cadastrar um usuário no sistema, verifica se o usuário já existe
+	 * Método utilizado para atualizar um cadastro
+	 * 
+	 * @return Ok
+	 * @author Will
+	 */
+	public ResponseEntity<Usuario> atualizarCadastro(Usuario usuario) {
+		return repository.findById(usuario.getId()).map(resp -> {
+			usuario.setSenha(bcrypt(usuario.getSenha()));
+			resp.setNome(usuario.getNome());
+			resp.setUsuario(usuario.getUsuario());
+			resp.setSenha(usuario.getSenha());
+			resp.setFoto(usuario.getFoto());
+			resp.setTipo(usuario.getTipo());
+			return ResponseEntity.ok(repository.save(resp));
+		}).orElseGet(() -> {
+			return ResponseEntity.badRequest().build();
+		});
+	}
+
+	/**
+	 * Método utilizado para cadastrar um usuário no sistema, verifica se o usuário
+	 * já existe
+	 * 
 	 * @param usuario
 	 * @return salva usuário no repositório e retorna um Optional
 	 * @author Will
@@ -45,16 +91,26 @@ public class UsuarioService {
 		return repository.findByUsuario(usuario.getUsuario()).map(resp -> {
 			return Optional.empty();
 		}).orElseGet(() -> {
-			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-			String senhaEncoder = encoder.encode(usuario.getSenha());
-			usuario.setSenha(senhaEncoder);
+			usuario.setSenha(bcrypt(usuario.getSenha()));
 			return Optional.ofNullable(repository.save(usuario));
 		});
 
 	}
 
 	/**
+	 * Método utilizado para encontrar um usuário pelo id no sistema
+	 * 
+	 * @param id
+	 * @return Usuário
+	 * @author Will
+	 */
+	public ResponseEntity<Usuario> findByIdUsuario(Long id) {
+		return repository.findById(id).map(resp -> ResponseEntity.ok(resp)).orElse(ResponseEntity.notFound().build());
+	}
+
+	/**
 	 * Utilizado para logar um usuário no sistema
+	 * 
 	 * @param user
 	 * @return retorna um UserLogin
 	 * @author Will
@@ -64,11 +120,7 @@ public class UsuarioService {
 		Optional<Usuario> usuario = repository.findByUsuario(user.get().getUsuario());
 		if (usuario.isPresent()) {
 			if (encoder.matches(user.get().getSenha(), usuario.get().getSenha())) {
-				String auth = user.get().getUsuario() + ":" + user.get().getSenha();
-				byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("US-ASCII")));
-				String authHeader = "Basic " + new String(encodedAuth);
-
-				user.get().setToken(authHeader);
+				user.get().setToken(gerarToken(user.get().getUsuario(), user.get().getSenha()));
 				user.get().setUsuario(usuario.get().getUsuario());
 				user.get().setId(usuario.get().getId());
 				user.get().setNome(usuario.get().getNome());

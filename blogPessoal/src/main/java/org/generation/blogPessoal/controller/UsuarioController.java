@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,7 +40,23 @@ public class UsuarioController {
 	public ResponseEntity<List<Usuario>> todosUsuarios() {
 		return usuarioService.mostrarTodos();
 	}
-
+	
+	@ApiOperation(value = "Procura um usuário por id")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Usuário encontrado"),
+			@ApiResponse(code = 404, message = "Não existe usuário com este id no sistema") })
+	@GetMapping("/{id}")
+	public ResponseEntity<Usuario> findByIdUsuario(@PathVariable Long id){
+		return usuarioService.findByIdUsuario(id);
+	}
+	
+	@ApiOperation(value = "Atualiza um usuário")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Usuário atualizado"),
+			@ApiResponse(code = 400, message = "Usuário invalido") })
+	@PutMapping("/atualizar")
+	public ResponseEntity<Usuario> attUsuario(@RequestBody Usuario usuario){
+		return usuarioService.atualizarCadastro(usuario);
+	}
+ 
 	@ApiOperation(value = "Executa o login de usuario")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Login efetuado"),
 			@ApiResponse(code = 401, message = "Usuario ou senha incorreto") })
